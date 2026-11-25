@@ -103,7 +103,7 @@ class Tokenizer:
         """
         # write the model: to be used in load() later
         model_file = file_prefix + ".model"
-        with open(model_file, 'w') as f:
+        with open(model_file, 'w', encoding="utf-8") as f:
             # write the version, pattern and merges, that's all that's needed
             f.write("minbpe v1\n")
             f.write(f"{self.pattern}\n")
@@ -149,7 +149,7 @@ class Tokenizer:
             version = f.readline().strip()
             assert version == "minbpe v1"
             # read the pattern
-            self.pattern = f.readline().strip()
+            self.pattern = f.readline().rstrip("\n")
             # read the special tokens
             num_special = int(f.readline().strip())
             for _ in range(num_special):

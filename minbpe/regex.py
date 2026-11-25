@@ -33,6 +33,10 @@ class RegexTokenizer(Tokenizer):
         self.special_tokens = {}
         self.inverse_special_tokens = {}
 
+    def load(self, model_file):
+        super().load(model_file)
+        self.compiled_pattern = re.compile(self.pattern)
+
     def train(self, text, vocab_size, verbose=False):
         assert vocab_size >= 256
         num_merges = vocab_size - 256

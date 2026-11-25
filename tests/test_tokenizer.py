@@ -106,6 +106,17 @@ def test_wikipedia_example(tokenizer_factory):
     assert ids == [258, 100, 258, 97, 99]
     assert tokenizer.decode(tokenizer.encode(text)) == text
 
+def test_load_custom_pattern(tmp_path):
+    tokenizer = RegexTokenizer(pattern=r"..| ")
+    tokenizer.train("abcdabcd", 257)
+    prefix = str(tmp_path / "custom")
+    tokenizer.save(prefix)
+
+    restored = RegexTokenizer()
+    restored.load(prefix + ".model")
+    text = "zabz "
+    assert restored.encode(text) == tokenizer.encode(text) == list(text.encode("utf-8"))
+
 @pytest.mark.parametrize("special_tokens", [{}, special_tokens])
 def test_save_load(special_tokens):
     # take a bit more complex piece of text and train the tokenizer, chosen at random
